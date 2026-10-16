@@ -3,36 +3,248 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<title>San Diego Data Sources</title>
 <style>
-  body{font-family:Segoe UI,Arial,sans-serif;margin:12px;background:#fff}
-  #q{width:100%;max-width:420px;padding:10px;font-size:16px;border:1px solid #888;border-radius:6px}
-  #grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin-top:14px}
-  .card{border:1px solid #ddd;border-radius:8px;padding:14px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
-  .card h3{margin:0 0 6px;font-size:16px}
-  .card a{color:#0f6cbd;word-break:break-all}
-  #count{margin-top:8px;color:#555;font-size:13px}
+:root{--stone:#2C3347;--lav:#3A6AAE;--dteal:#0077A3;--teal:#0381A2;--brand:#06B7DF;--light:#84D9F7;--coral:#D95B32}
+*{box-sizing:border-box}
+body{margin:0;padding:20px;font-family:"Segoe UI",system-ui,Arial,sans-serif;color:var(--stone);background:#F4F8FB}
+header{background:linear-gradient(135deg,var(--stone),var(--lav) 60%,var(--dteal));color:#fff;border-radius:14px;padding:22px 24px;margin-bottom:18px}
+header h1{margin:0 0 4px;font-size:22px}
+header p{margin:0 0 14px;color:var(--light);font-size:14px}
+#q{width:100%;max-width:520px;padding:12px 16px;font-size:16px;border:2px solid transparent;border-radius:999px;outline:none;color:var(--stone)}
+#q:focus{border-color:var(--brand);box-shadow:0 0 0 3px rgba(132,217,247,.5)}
+#chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 10px}
+.chip{border:1px solid var(--lav);background:#fff;color:var(--lav);padding:5px 12px;border-radius:999px;font-size:13px;cursor:pointer}
+.chip:hover{background:var(--light)}
+.chip.active{background:var(--lav);color:#fff}
+#count{font-size:13px;margin:6px 2px 12px;color:var(--teal)}
+#grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+.card{background:#fff;border-radius:12px;border-top:4px solid var(--brand);padding:16px;display:flex;flex-direction:column;gap:10px;box-shadow:0 2px 8px rgba(44,51,71,.08);transition:transform .15s,box-shadow .15s}
+.card:hover{transform:translateY(-3px);box-shadow:0 8px 18px rgba(44,51,71,.16)}
+.badge{align-self:flex-start;background:var(--stone);color:#fff;font-size:11px;letter-spacing:.04em;text-transform:uppercase;padding:3px 9px;border-radius:999px}
+.card h3{margin:0;font-size:16px;line-height:1.3;color:var(--stone)}
+.card p{margin:0;font-size:13.5px;line-height:1.45;flex:1}
+.meta{display:flex;flex-wrap:wrap;gap:6px;font-size:12px}
+.meta span{background:#E6F6FC;color:var(--dteal);padding:3px 8px;border-radius:6px}
+.card a.btn{align-self:flex-start;background:var(--dteal);color:#fff;text-decoration:none;padding:8px 14px;border-radius:8px;font-size:13px;font-weight:600}
+.card a.btn:hover,.card a.btn:focus{background:var(--coral)}
+mark{background:var(--light);color:var(--stone);border-radius:3px;padding:0 1px}
+#empty{display:none;padding:30px;text-align:center;color:var(--coral);font-weight:600}
 </style>
 </head>
 <body>
-<input id="q" type="search" placeholder="Search sources..." aria-label="Search sources">
-<div id="count"></div>
+<header>
+  <h1>San Diego Data Sources</h1>
+  <p>Search by source, description, geography, type or frequency.</p>
+  <input id="q" type="search" placeholder="Search sources..." aria-label="Search sources" autocomplete="off">
+</header>
+<div id="chips" role="group" aria-label="Filter by type"></div>
+<div id="count" aria-live="polite"></div>
 <div id="grid"></div>
+<div id="empty">No sources match your search.</div>
 <script>
 const sources = [
-  {name:"Bureau of Labor Statistics", desc:"Employment and wage data", url:"https://www.bls.gov"},
-  {name:"California EDD LMID", desc:"State labor-market information", url:"https://labormarketinfo.edd.ca.gov"},
-  {name:"O*NET OnLine", desc:"Occupational information", url:"https://www.onetonline.org"}
+ {
+  "id": 1,
+  "source": "BLS San Diego Metropolitan Area Economic Summary",
+  "description": "Employment, unemployment, wages, occupational employment, CPI and economic indicators for San Diego MSA",
+  "url": "https://www.bls.gov/regions/west/ca_sandiego_msa.htm",
+  "geography": "San Diego MSA",
+  "type": "Economic Summary",
+  "periodicity": "Monthly/Annual",
+  "rating": ""
+ },
+ {
+  "id": 2,
+  "source": "BLS San Diego County Employment and Wages (QCEW)",
+  "description": "Detailed industry employment and wages by NAICS",
+  "url": "https://data.bls.gov/maps/cew/CA?period=2026-Q1&industry=10&geo_id=06000&chartData=3&distribution=1&pos_color=blue&neg_color=orange&showHideChart=show&ownerType=0",
+  "geography": "California",
+  "type": "Dashboard",
+  "periodicity": "Quarterly",
+  "rating": ""
+ },
+ {
+  "id": 3,
+  "source": "BLS Occupational Employment and Wage Statistics - San Diego",
+  "description": "Local occupation employment and wage estimates",
+  "url": "https://www.bls.gov/oes/current/oes_41740.htm",
+  "geography": "San Diego MSA",
+  "type": "Database",
+  "periodicity": "Annual",
+  "rating": ""
+ },
+ {
+  "id": 4,
+  "source": "California EDD San Diego County Profile",
+  "description": "Labor force, unemployment, industry employment and demographics",
+  "url": "https://labormarketinfo.edd.ca.gov/geography/sandiego-county.html",
+  "geography": "San Diego County",
+  "type": "Data catalog",
+  "periodicity": "Monthly",
+  "rating": ""
+ },
+ {
+  "id": 5,
+  "source": "California EDD San Diego Economic Profile",
+  "description": "Local labor market reports and economic trends",
+  "url": "https://labormarketinfo.edd.ca.gov/file/lfmonth/sand$pds.pdf",
+  "geography": "San Diego County",
+  "type": "Report",
+  "periodicity": "Monthly",
+  "rating": ""
+ },
+ {
+  "id": 6,
+  "source": "SANDAG Data Surfer",
+  "description": "Demographics, workforce, commuting, housing and economic indicators",
+  "url": "https://opendata.sandag.org/stories/s/g7b3-cqbq?param=none",
+  "geography": "San Diego Region",
+  "type": "Data catalog",
+  "periodicity": "Varies",
+  "rating": ""
+ },
+ {
+  "id": 7,
+  "source": "SANDAG Demographic and Economic Forecasts",
+  "description": "Population, labor force and industry projections",
+  "url": "https://opendata.sandag.org/stories/s/SANDAG-Forecast-PDF-Reports/pk37-9enk/",
+  "geography": "San Diego Region",
+  "type": "Forecasts",
+  "periodicity": "Annual",
+  "rating": ""
+ },
+ {
+  "id": 8,
+  "source": "San Diego Regional EDC Data Center",
+  "description": "Talent, workforce, wages, industries and competitiveness metrics",
+  "url": "https://www.sandiegobusiness.org/about-the-region/",
+  "geography": "San Diego Region",
+  "type": "Dashboard",
+  "periodicity": "Quarterly/Annual",
+  "rating": ""
+ },
+ {
+  "id": 9,
+  "source": "San Diego Regional EDC Talent Dashboard",
+  "description": "Workforce, education and talent pipeline indicators",
+  "url": "https://www.sandiegobusiness.org/doing-business-here/finding-talent/",
+  "geography": "San Diego Region",
+  "type": "Dashboard",
+  "periodicity": "Annual",
+  "rating": ""
+ },
+ {
+  "id": 10,
+  "source": "Census OnTheMap (San Diego)",
+  "description": "Commuting patterns and workforce flow analysis",
+  "url": "https://onthemap.ces.census.gov",
+  "geography": "Census Tract to County",
+  "type": "Mapping Tool",
+  "periodicity": "Annual",
+  "rating": ""
+ },
+ {
+  "id": 11,
+  "source": "LEHD QWI Explorer",
+  "description": "Workforce demographics, earnings and turnover",
+  "url": "https://qwiexplorer.ces.census.gov",
+  "geography": "All",
+  "type": "Dashboard",
+  "periodicity": "Quarterly",
+  "rating": ""
+ },
+ {
+  "id": 12,
+  "source": "Federal Reserve FRED - San Diego MSA",
+  "description": "Local unemployment, CPI and economic indicators",
+  "url": "https://fred.stlouisfed.org/tags/series?t=san+diego",
+  "geography": "San Diego MSA",
+  "type": "Database",
+  "periodicity": "Monthly",
+  "rating": ""
+ },
+ {
+  "id": 13,
+  "source": "Center of Excellence (San Diego & Imperial)",
+  "description": "Sector studies, occupation analyses and regional workforce reports",
+  "url": "https://coeccc.net/region/san-diego-imperial/",
+  "geography": "San Diego & Imperial Region",
+  "type": "Reports/Dashboards",
+  "periodicity": "Ongoing",
+  "rating": ""
+ },
+ {
+  "id": 14,
+  "source": "The City of San Diego Economic Development",
+  "description": "Economic development maps",
+  "url": "https://www.sandiego.gov/economic-development/maps",
+  "geography": "San Diego Region",
+  "type": "Maps",
+  "periodicity": "Varies",
+  "rating": ""
+ },
+ {
+  "id": 15,
+  "source": "San Diego Open Data Portal",
+  "description": "Public datasets including economic and workforce indicators",
+  "url": "https://data.sandiego.gov",
+  "geography": "City of San Diego",
+  "type": "Open Data Portal",
+  "periodicity": "Varies",
+  "rating": ""
+ },
+ {
+  "id": 16,
+  "source": "County of San Diego Data Portal",
+  "description": "County-level demographic, economic and workforce datasets",
+  "url": "https://data.sandiegocounty.gov",
+  "geography": "San Diego County",
+  "type": "Open Data Portal",
+  "periodicity": "Varies",
+  "rating": ""
+ },
+ {
+  "id": 17,
+  "source": "US Census Bureau",
+  "description": "San Diego profile and census data including demographics in a dashboard",
+  "url": "https://data.census.gov/profile/San_Diego_County%2c_California?g=050XX00US06073#populations-and-people",
+  "geography": "San Diego",
+  "type": "Dashboard",
+  "periodicity": "Annual",
+  "rating": ""
+ },
+ {
+  "id": 18,
+  "source": "WIOA Trends",
+  "description": "CWA WIOA reported performance data for the San Diego Workforce Partnership",
+  "url": "https://ca-lwda-trends.netlify.app/san_diego#overview",
+  "geography": "San Diego",
+  "type": "Dashboard",
+  "periodicity": "Annual",
+  "rating": ""
+ }
 ];
-const grid=document.getElementById("grid"), q=document.getElementById("q"), count=document.getElementById("count");
-function esc(s){return s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+const q=document.getElementById("q"),grid=document.getElementById("grid"),count=document.getElementById("count"),
+      chips=document.getElementById("chips"),empty=document.getElementById("empty");
+let activeType="All";
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const hl=(s,t)=>{s=esc(s);if(!t)return s;
+  const safe=esc(t).replace(/[.*+?^${}()|[\]\\]/g,"\\$&");
+  return s.replace(new RegExp("("+safe+")","gi"),"<mark>$1</mark>");};
+const types=["All",...[...new Set(sources.map(s=>s.type))].sort()];
+chips.innerHTML=types.map(t=>`<button class="chip${t==="All"?" active":""}" data-t="${esc(t)}">${esc(t)}</button>`).join("");
+chips.addEventListener("click",e=>{const b=e.target.closest(".chip");if(!b)return;
+  activeType=b.dataset.t;chips.querySelectorAll(".chip").forEach(c=>c.classList.toggle("active",c===b));render();});
 function render(){
   const t=q.value.trim().toLowerCase();
-  const hits=sources.filter(s=>(s.name+" "+s.desc+" "+s.url).toLowerCase().includes(t));
-  grid.innerHTML=hits.map(s=>`<div class="card"><h3>${esc(s.name)}</h3><p>${esc(s.desc)}</p>
-    <a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.url)}</a></div>`).join("");
-  count.textContent=hits.length+" of "+sources.length+" shown";
-}
-q.addEventListener("input",render); render();
-</script>
-</body>
-</html>
+  const hits=sources.filter(s=>(activeType==="All"||s.type===activeType)&&
+    [s.source,s.description,s.url,s.geography,s.type,s.periodicity].join(" ").toLowerCase().includes(t));
+  grid.innerHTML=hits.map(s=>`<article class="card">
+    <span class="badge">${esc(s.type)}</span>
+    <h3>${hl(s.source,t)}</h3>
+    <p>${hl(s.description,t)}</p>
+    <div class="meta"><span>${hl(s.geography,t)}</span><span>${hl(s.periodicity,t)}</span></div>
+    <a class="btn" href="${esc(s.url)}" target="_blank" rel="noopener noreferrer">Open source &rarr;</a>
+  </article>`).join("");
+  empty.style.display=h
