@@ -247,4 +247,10 @@ function render(){
     <div class="meta"><span>${hl(s.geography,t)}</span><span>${hl(s.periodicity,t)}</span></div>
     <a class="btn" href="${esc(s.url)}" target="_blank" rel="noopener noreferrer">Open source &rarr;</a>
   </article>`).join("");
-  empty.style.display=h
+  empty.style.display=hits.length?"none":"block";
+  count.textContent=hits.length+" of "+sources.length+" sources shown";
+}
+q.addEventListener("input",render);render();
+</script>
+</body>
+</html>
